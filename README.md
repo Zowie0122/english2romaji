@@ -7,7 +7,7 @@ For more, check it here 👉 https://review-cards-b329b.web.app/
 
 Special thanks to Jisho api : https://jisho.org/, it is all free !
 
-# Teck stacks
+# Tech stacks
 
 firebase (firestore, firebase auth, firebase hosting)
 Vue.js Vuex
