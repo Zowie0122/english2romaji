@@ -1,10 +1,29 @@
 <template>
   <div id="app">
-    <router-link to="/">Login | </router-link>
-    <router-link to="/signup"> Sign up </router-link>
+    <router-link to="/">Login |</router-link>
+    <router-link to="/signup">Sign up</router-link>
+    <button v-show="email !== ''" v-on:click="logout">
+      <span>| Logout</span>
+    </button>
     <router-view />
   </div>
 </template>
+
+<script>
+import { mapActions } from "vuex";
+export default {
+  name: "App",
+  computed: {
+    email() {
+      return this.$store.state.user_email;
+    }
+  },
+
+  methods: {
+    ...mapActions(["logout"])
+  }
+};
+</script>
 
 <style lang="scss">
 @import "node_modules/bootstrap/scss/bootstrap";

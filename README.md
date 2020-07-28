@@ -1,24 +1,16 @@
-# hiragana
+# Project Intro:
 
-## Project setup
-```
-yarn install
-```
+When you are travelling to Japan, type english and get the japanese romaji pronunciation directly.
+You can save your search result and make a study notes.
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+For more, check it here 👉 https://review-cards-b329b.web.app/
 
-### Compiles and minifies for production
-```
-yarn build
-```
+Special thanks to Jisho api : https://jisho.org/, it is all free !
 
-### Lints and fixes files
-```
-yarn lint
-```
+<p align="center">
+  <img src="./interface.png" width="750">
+</p>
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+<p align="center">
+  <img src="./dashboard.png" width="750">
+</p>

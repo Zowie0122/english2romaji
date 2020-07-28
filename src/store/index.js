@@ -233,6 +233,7 @@ function restructureKana(array) {
       result.push(letter);
     }
   }
+  console.log(result);
   return result;
 }
 
@@ -248,6 +249,7 @@ const intialState = {
     display_name: "",
     cards: [],
   },
+  showModal: false,
 };
 
 export default new Vuex.Store({
@@ -261,6 +263,9 @@ export default new Vuex.Store({
     },
     search: (state) => {
       return state.user_search;
+    },
+    showResult: (state) => {
+      return state.showModal;
     },
   },
   mutations: {
@@ -300,12 +305,21 @@ export default new Vuex.Store({
     },
     setSearchResult: (state, payload) => {
       state.search_result = payload.romaji;
+      state.showModal = true;
     },
-    getUpdated: (state) => {
-      console.log(state);
+    getUpdated: () => {
+      return;
     },
     setUserSavedWords: (state, payload) => {
       state.user_saved_words = payload;
+    },
+    closeModal(state) {
+      state.showModal = false;
+      console.log("user search", state.user_search);
+    },
+    notFound(state) {
+      state.search_result = "Sorry,the word is not found";
+      state.showModal = true;
     },
   },
 
@@ -390,8 +404,9 @@ export default new Vuex.Store({
 
     async handleSearch({ commit }) {
       try {
+        const userInputWithoutSpace = this.state.user_search.trim();
         const res = await axios.get(
-          `https://cors-anywhere.herokuapp.com/https://jisho.org/api/v1/search/words?keyword=${this.state.user_search}`,
+          `https://cors-anywhere.herokuapp.com/https://jisho.org/api/v1/search/words?keyword=${userInputWithoutSpace}`,
           {
             headers: {
               "Access-Control-Allow-Origin": "*",
@@ -401,16 +416,18 @@ export default new Vuex.Store({
             mode: "no-cors",
           }
         );
-
-        const kana = res.data.data[0].japanese[0].reading;
-        console.log(kana);
-        const array = kana.split("");
-
-        const kanaArray = restructureKana(array);
-
-        const romajiArray = kanaArray.map((ele) => romaji_chart[ele]);
-        const romaji = romajiArray.join(" ");
-        commit("setSearchResult", { romaji });
+        console.log(res);
+        if (res.data.data.length === 0) {
+          console.log("not found");
+          commit("notFound");
+        } else {
+          const kana = res.data.data[0].japanese[0].reading;
+          const array = kana.split("");
+          const kanaArray = restructureKana(array);
+          const romajiArray = kanaArray.map((ele) => romaji_chart[ele]);
+          const romaji = romajiArray.join(" ");
+          commit("setSearchResult", { romaji });
+        }
       } catch (err) {
         console.log(err);
       }
@@ -469,7 +486,7 @@ export default new Vuex.Store({
           .child("cards")
           .child(payload)
           .remove();
-        commit("toDashboard");
+        commit("getUpdated");
       } catch (error) {
         console.log(error);
       }
@@ -482,6 +499,13 @@ export default new Vuex.Store({
       } catch (err) {
         console.log(err);
       }
+    },
+    openModal({ commit }) {
+      commit("openModal");
+    },
+    hideModal({ commit }) {
+      commit("closeModal");
+      console.log(this.state.user_search);
     },
   },
 });

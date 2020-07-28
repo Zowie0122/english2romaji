@@ -15,8 +15,6 @@ Vue.use(CardPlugin);
 
 Vue.config.productionTip = false;
 
-console.log(firebaseConfig);
-
 firebase.initializeApp(firebaseConfig);
 
 new Vue({
